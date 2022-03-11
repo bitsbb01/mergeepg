@@ -63,7 +63,7 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Install xmllint
+      - name: Install xmltv
         run:  sudo apt install xmltv
   
       - name: run epg merger
