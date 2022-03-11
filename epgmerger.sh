@@ -16,9 +16,8 @@ endtimes=("060000" "120000" "180000" "235900")
 DUMMYFILENAME=xdummy.xml
 
 LISTS=(
-"http://link.to.list.1" 
-"https://link.to.list.2.xml.gz"
-"http://link.to.list.3.gz"
+"http://m3u4u.com/epg/5g28nep9jgh2k5eyzpe9" 
+"http://m3u4u.com/epg/782dyqr57gamzrgn4zp5"
 )
 
 dummycreator() {
