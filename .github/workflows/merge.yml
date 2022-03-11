@@ -67,6 +67,4 @@ jobs:
         run:  sudo apt install xmltv
   
       - name: run epg merger
-        run: |
-          echo "Command: './epgmerger.sh'"
-          ./epgmerger.sh
+        run: ./epgmerger.sh
