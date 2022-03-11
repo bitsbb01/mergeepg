@@ -1,0 +1,72 @@
+name: M3U8_Creator
+
+on:
+  workflow_dispatch:
+  # Run every 2 hours after https://github.com/bitsbb01/iptvcat-scrapper
+  # 12.10 UTC Time, 06.10 Central Time
+  # Changed to every 2 hours, due to including Youtube links and Pluto, so those links are always correct and the playlist is always upto date.
+  schedule:
+    - cron: "0 0/2 * * *"
+  push:
+    branches:
+    - master
+    - main
+
+jobs:
+
+  Running_M3U8_Creator:
+    name: Running EPG Merger
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Last Attempts
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          echo $(date) >> last_attempt.txt
+          cat last_attempt.txt
+          ls -ltr
+          git status
+          git add last_attempt.txt
+          git status
+          git commit -m "cron: setting last attempt time stamp" -a
+          git status
+#          git push
+          
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Check epg File existence
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "./merged.xmltv, ../merged.xmltv.gz"
+
+      - uses: actions/checkout@v2
+      - name: If *.M3U8 Files exists - Then Cleanup
+        if: steps.check_files.outputs.files_exists == 'true'
+        # Only runs if all of the files exists
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git rm ./merged.xmltv
+          git status
+          git push          
+          git commit -m "cron: Updated by Bot" -a
+         
+        
+      ### SETUP THE ENVIRONMENT
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+- name: Install xmllint
+  run:  sudo apt install xmltv
+  
+      - name: run epg merger
+        run: |
+          echo "Command: './epgmerger.sh'"
+          ./epgmerger.sh
